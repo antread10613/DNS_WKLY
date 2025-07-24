@@ -1,0 +1,29 @@
+CREATE
+or replace TABLE OMF_EXT_USER_SPACE.AJONES.DNS AS
+SELECT
+    A.INDIV_ID,
+    A.SL_OM_FLG,
+    A.CUST_ID,
+    A.CUST_ID_OM,
+    B.AUTH_CD,
+    to_varchar (CURRENT_DATE(), 'YYYY_MM_DD') as MOD_DATE
+FROM
+    PROD_OMF_INBOUND_DATA_SHARE.PROD_ANALYTIC_MART_SHARE.CUSTOMER A
+    INNER JOIN PROD_OMF_INBOUND_DATA_SHARE.PROD_ANALYTIC_MART_SHARE.MDM_IND_AUTHORIZATION B 
+    ON A.INDIV_ID = B.INDIV_ID
+    and a.CUST_ID is not null
+    and a.CUST_ID <> 0
+    AND B.CUR_AUTH_FLG = 'N'
+    AND B.AUTH_CD IN (
+        'DECEASED',
+        'CUST_DEC',
+        'DECEASED_BORR',
+        'DNS',
+        'DNS_ALL_MEDIA',
+        'EMPL',
+        'PRISON',
+        'DONOT_PHN',
+        'OM_DNM',
+        'TREASURY_ADDR',
+        'KOFAX_OPT_OUT',
+        'DNS_MAIL');

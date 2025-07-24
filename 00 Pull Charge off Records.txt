@@ -1,0 +1,22 @@
+CREATE
+or replace TABLE OMF_EXT_USER_SPACE.AJONES.CUST_CO_EXCLUSIONS as
+select
+    *
+from
+    OMF_EXT_USER_SPACE.AJONES.INDIVIDUAL_CUSTOMER
+WHERE
+    ILOAN_REASON_CD IN ('iLoan_Charge_Off', 'iLoan Charge-Off')
+    OR EXP_CO_FLG = 'Y'
+    OR EQF_CO_FLG = 'Y'
+    OR CHARGE_OFF_YN = 'Y'
+    OR TOT_CO_YN = 'Y';
+CREATE
+    or replace TABLE OMF_EXT_USER_SPACE.AJONES.CHARGE_OFF_FILE as
+select
+    *,
+    to_varchar (CURRENT_DATE(), 'YYYY_MM_DD') as MOD_DATE
+from
+    OMF_EXT_USER_SPACE.AJONES.CUST_CO_EXCLUSIONS
+where
+    CUST_ID <> 0
+    OR CUST_ID is not null;
